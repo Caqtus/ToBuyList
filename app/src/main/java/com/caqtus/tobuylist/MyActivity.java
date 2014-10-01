@@ -7,7 +7,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -19,13 +21,22 @@ public class MyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
-
+        Button addNew = (Button) findViewById(R.id.button);
         ListView listView = (ListView) findViewById(R.id.list);
 
         //list values array
         String[] values = new String[]{
 
         };
+
+
+        // TODO: onClick adds value to arrayList and displayes in listView
+        addNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         //converting into array list
         final ArrayList<String> list = new ArrayList<String>();
