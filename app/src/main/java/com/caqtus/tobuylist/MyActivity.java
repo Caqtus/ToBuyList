@@ -21,7 +21,7 @@ public class MyActivity extends Activity {
         ListView listView = (ListView) findViewById(R.id.list);
 
         String[] values = new String[]{
-          "Food", "Consumable", "tech", "Steam sales"
+          "Food", "Consumable", "tech", "Steam sales :3"
         };
 
         final ArrayList<String> list = new ArrayList<String>();
