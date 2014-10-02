@@ -22,21 +22,13 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
         Button addNew = (Button) findViewById(R.id.button);
-        ListView listView = (ListView) findViewById(R.id.list);
+        final ListView listView = (ListView) findViewById(R.id.list);
 
         //list values array
         String[] values = new String[]{
 
         };
 
-
-        // TODO: onClick adds value to arrayList and displayes in listView
-        addNew.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
 
         //converting into array list
         final ArrayList<String> list = new ArrayList<String>();
@@ -45,9 +37,26 @@ public class MyActivity extends Activity {
             System.out.println(list.get(i));
         }
 
+
         //setting arraylist data to listView
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
         listView.setAdapter(adapter);
+
+
+
+        //onClick adds "test" to arraylist and redraws it again
+        //TODO: onclick should open menu with options to add str + some other options
+        addNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int lastIndex = list.lastIndexOf(list);
+            list.add(lastIndex + 1, "test");
+            listView.setAdapter(adapter);
+            }
+        });
+
+
+
 
     }
 
