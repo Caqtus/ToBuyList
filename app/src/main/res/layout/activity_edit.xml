@@ -11,6 +11,7 @@
 
 
     <EditText
+        android:maxLength="24"
         android:id="@+id/edit_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,20 +21,22 @@
         android:hint="Name of ToDo" />
 
     <EditText
+        android:maxLength="3"
         android:id="@+id/edit_weight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:hint="Weight in Kilograms"
-        android:inputType="number" />
+        android:inputType="numberDecimal" />
 
     <EditText
+        android:maxLength="3"
         android:id="@+id/edit_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:hint="Price in Lari"
-        android:inputType="number"/>
+        android:inputType="numberDecimal"/>
 
 
     <Spinner android:id="@+id/category_spinner"
@@ -41,14 +44,14 @@
         android:layout_height="wrap_content" />
 
 
-    <View android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-
     <Button
         android:id="@+id/edit_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Save" />
+
+    <View android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
 </LinearLayout>

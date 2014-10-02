@@ -21,6 +21,9 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import butterknife.InjectView;
@@ -46,24 +49,44 @@ public class MyActivity extends Activity implements LoaderManager.LoaderCallback
 
 
         mAdapter = new SimpleCursorAdapter(this, R.layout.single_row, null, new String[]{
+
+
                 SQLHelper.TITLE, SQLHelper.AMOUNT, SQLHelper.PRICE
         }, new int[]{
                 R.id.title, R.id.amount, R.id.price
         })
+
+
         {
             @Override
             public void bindView(View view, Context context, Cursor cursor) {
                 super.bindView(view, context, cursor);
+
                 ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
                 String category = cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.CATEGORY));
+
+
+
                 if("Food".equals(category)) {
                 imageView.setImageResource(R.drawable.food);
                 } else if("Gifts".equals(category)) {
                 imageView.setImageResource(R.drawable.gift);
 
                 }
+
+                //Converting Float to two decimal float & removing currency symbol added by numberFormatter
+                NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+                DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) numberFormat).getDecimalFormatSymbols();
+                decimalFormatSymbols.setCurrencySymbol("");
+                ((DecimalFormat) numberFormat).setDecimalFormatSymbols(decimalFormatSymbols);
+
                 TextView price = (TextView) view.findViewById(R.id.price);
-                price.setText(price.getText() + " Lari");
+                TextView amount = (TextView) view.findViewById(R.id.amount);
+
+                price.setText(numberFormat.format(Float.parseFloat(price.getText().toString())
+                        * Float.parseFloat(amount.getText().toString())) + " Lari");
+                amount.setText(amount.getText() + " KG");
+
             }
         };
         listView.setAdapter(mAdapter);
