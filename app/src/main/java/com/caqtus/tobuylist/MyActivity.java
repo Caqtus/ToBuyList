@@ -15,11 +15,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import butterknife.InjectView;
 
 
 public class MyActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -46,7 +50,6 @@ public class MyActivity extends Activity implements LoaderManager.LoaderCallback
         }, new int[]{
                 R.id.title, R.id.amount, R.id.price
         })
-
         {
             @Override
             public void bindView(View view, Context context, Cursor cursor) {
@@ -59,9 +62,12 @@ public class MyActivity extends Activity implements LoaderManager.LoaderCallback
                 imageView.setImageResource(R.drawable.gift);
 
                 }
+                TextView price = (TextView) view.findViewById(R.id.price);
+                price.setText(price.getText() + " Lari");
             }
         };
         listView.setAdapter(mAdapter);
+
 
 
         //onClick adds "test" to arraylist and redraws it again
