@@ -60,7 +60,7 @@ public class MyActivity extends Activity implements LoaderManager.LoaderCallback
                 imageView.setImageResource(R.drawable.food);
                 } else if("Gifts".equals(category)) {
                 imageView.setImageResource(R.drawable.gift);
-l
+
                 }
                 TextView price = (TextView) view.findViewById(R.id.price);
                 price.setText(price.getText() + " Lari");
