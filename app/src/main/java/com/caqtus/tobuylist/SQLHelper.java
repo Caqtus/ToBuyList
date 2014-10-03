@@ -14,10 +14,9 @@ public class SQLHelper extends SQLiteOpenHelper {
     public static final String ID = "_id";
     public static final String TITLE = "title";
     public static final String CATEGORY = "category";
+    public static final String TIMESTAMP = "timestamp";
     public static final String AMOUNT = "amount";
     public static final String PRICE = "price";
-    public static final int ALARM_HOURS = 0;
-    public static final int ALARM_MINUTES = 0;
 
     private static final String CREATE_DATABASE_TABLE = "CREATE TABLE "
             + TABLE_NAME + " ("
@@ -26,8 +25,7 @@ public class SQLHelper extends SQLiteOpenHelper {
             + CATEGORY + " TEXT, "
             + AMOUNT + " TEXT, "
             + PRICE + " TEXT,"
-            + ALARM_HOURS + " INTEGER "
-            + ALARM_MINUTES + " INTEGER)";
+            + TIMESTAMP + " INTEGER)";
 
 
     public SQLHelper(Context context) {

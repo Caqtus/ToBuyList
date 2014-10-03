@@ -25,6 +25,16 @@
             android:name=".EditActivity"
             android:label="@string/title_activity_edit" >
         </activity>
+
+        <service
+            android:name=".AlarmScheduler"
+            android:exported="false" >
+        </service>
+        <service
+            android:name=".NotifyShower"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>

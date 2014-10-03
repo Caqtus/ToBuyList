@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.format.Time;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -15,6 +16,10 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import java.security.Timestamp;
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -49,8 +54,12 @@ public class EditActivity extends Activity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, android.R.id.text1, new String[]{"Food", "Gifts"});
         categorySpinner.setAdapter(adapter);
 
-        timePicker.setCurrentHour(19);
-        timePicker.setCurrentMinute(0);
+        timePicker.setIs24HourView(true);
+        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        int minute =Calendar.getInstance().get(Calendar.MINUTE);
+        timePicker.setCurrentHour(hour);
+        timePicker.setCurrentMinute(minute);
+
 
 
     }
@@ -81,29 +90,56 @@ public class EditActivity extends Activity {
         ButterKnife.reset(this);
     }
 
+    private boolean validate() {
+
+
+        boolean result = true;
+
+        if (edit_price.getText().length() == 0){
+            edit_price.setError("Can't be empty!");
+        }
+
+        if(edit_weight.getText().length() == 0){
+            edit_weight.setError("Can't be empty");
+        }
+
+        if (edit_title.getText().length() == 0) {
+           edit_title.setError("Can't be empty!");
+            result = false;
+        }
+        return result;
+    }
+
     @OnClick(R.id.edit_save)
     public void onClickSave() {
+        if (validate()) {
+            Intent intent = new Intent(this, MyActivity.class);
+            startActivity(intent);
 
-        Intent intent = new Intent(this, MyActivity.class);
-        startActivity(intent);
+            Toast.makeText(this, "Make stuff here", Toast.LENGTH_SHORT).show();
+            ContentValues contentValues = new ContentValues();
 
-        Toast.makeText(this, "Make stuff here", Toast.LENGTH_SHORT).show();
-        ContentValues contentValues = new ContentValues();
-
-        String title = String.valueOf(edit_title.getText());
-        String category = categorySpinner.getSelectedItem().toString();
-        String weight = String.valueOf(edit_weight.getText());
-        String price = String.valueOf(edit_price.getText());
-        int alarmHour = timePicker.getCurrentHour();
-        int alarmMinute = timePicker.getCurrentMinute();
+            String title = String.valueOf(edit_title.getText());
+            String category = categorySpinner.getSelectedItem().toString();
+            String weight = String.valueOf(edit_weight.getText());
+            String price = String.valueOf(edit_price.getText());
 
 
-        contentValues.put("TITLE", title);
-        contentValues.put("CATEGORY", category);
-        contentValues.put("AMOUNT", weight);
-        contentValues.put("PRICE", price);
-        contentValues.put("ALARM_HOURS", alarmHour);
-        contentValues.put("ALARM_MINUTES", alarmMinute);
-        getContentResolver().insert(MyContentProvider.ITEMS_URI, contentValues);
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
+            calendar.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+
+            contentValues.put("TITLE", title);
+            contentValues.put("CATEGORY", category);
+            contentValues.put("AMOUNT", weight);
+            contentValues.put("PRICE", price);
+            contentValues.put("TIMESTAMP", calendar.getTime().getTime());
+            System.out.println(System.currentTimeMillis());
+            getContentResolver().insert(MyContentProvider.ITEMS_URI, contentValues);
+            startService(new Intent(this, AlarmScheduler.class));
+            finish();
+        }
     }
 }
