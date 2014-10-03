@@ -3,6 +3,7 @@ package com.caqtus.tobuylist;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,11 +22,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.InjectView;
 
@@ -38,8 +44,20 @@ public class MyActivity extends Activity implements LoaderManager.LoaderCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
         Button addNew = (Button) findViewById(R.id.button);
-        final ListView listView = (ListView) findViewById(R.id.list);
 
+
+
+        final ListView listView = (ListView) findViewById(R.id.list);
+        registerForContextMenu(listView);
+        listView.setLongClickable(true);
+        final ContentValues values = new ContentValues();
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long id) {
+                getContentResolver().delete(MyContentProvider.buildItemUri(id), null, null);
+                return true;
+            }
+        });
 
 
         //setting arraylist data to listView
@@ -51,9 +69,9 @@ public class MyActivity extends Activity implements LoaderManager.LoaderCallback
         mAdapter = new SimpleCursorAdapter(this, R.layout.single_row, null, new String[]{
 
 
-                SQLHelper.TITLE, SQLHelper.AMOUNT, SQLHelper.PRICE
+                SQLHelper.TITLE, SQLHelper.AMOUNT, SQLHelper.PRICE , SQLHelper.TIMESTAMP
         }, new int[]{
-                R.id.title, R.id.amount, R.id.price
+                R.id.title, R.id.amount, R.id.price, R.id.edit_reminder
         })
 
 
@@ -74,15 +92,24 @@ public class MyActivity extends Activity implements LoaderManager.LoaderCallback
 
                 }
 
+
+
                 //Converting Float to two decimal float & removing currency symbol added by numberFormatter
                 NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
                 DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) numberFormat).getDecimalFormatSymbols();
                 decimalFormatSymbols.setCurrencySymbol("");
                 ((DecimalFormat) numberFormat).setDecimalFormatSymbols(decimalFormatSymbols);
 
+                TextView edit_reminder = (TextView) view.findViewById(R.id.edit_reminder);
                 TextView price = (TextView) view.findViewById(R.id.price);
                 TextView amount = (TextView) view.findViewById(R.id.amount);
 
+
+                //Displaying reminder in main views
+                // TODO: fix error
+                DateFormat dateFormat = new SimpleDateFormat("yy.MM.dd - HH:mm");
+                String formattedDate = dateFormat.format(new Date(cursor.getLong(cursor.getColumnIndexOrThrow(SQLHelper.TIMESTAMP))));
+                edit_reminder.setText(formattedDate);
                 price.setText(numberFormat.format(Float.parseFloat(price.getText().toString())
                         * Float.parseFloat(amount.getText().toString())) + " Lari");
                 amount.setText(amount.getText() + " KG");
@@ -94,13 +121,11 @@ public class MyActivity extends Activity implements LoaderManager.LoaderCallback
 
 
         //onClick adds "test" to arraylist and redraws it again
-        //TODO: onclick should open menu with options to add str + some other options
         addNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MyActivity.this, EditActivity.class);
                 startActivity(intent);
-            // TODO: insert new row to database & update list
             }
         });
 

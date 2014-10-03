@@ -14,7 +14,12 @@ public class MyContentProvider extends ContentProvider {
 
     public static final Uri ITEMS_URI = Uri.parse("content://com.caqtus.tobuylist/items");
 
+    public static Uri buildItemUri(long id) {
+        return ContentUris.withAppendedId(ITEMS_URI, id);
+    }
+
     public static final int CODE_ITEMS = 1;
+    public static final int CODE_ITEM = 2;
     UriMatcher uriMatcher = new UriMatcher(-1);
 
     private SQLHelper database;
@@ -24,6 +29,7 @@ public class MyContentProvider extends ContentProvider {
         database = new SQLHelper(getContext());
         database.getWritableDatabase();
         uriMatcher.addURI("com.caqtus.tobuylist", "items", CODE_ITEMS);
+        uriMatcher.addURI("com.caqtus.tobuylist", "items/#", CODE_ITEM);
 
         return true;
     }
@@ -60,7 +66,15 @@ public class MyContentProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String s, String[] strings) {
-        return 0;
+        switch (uriMatcher.match(uri)) {
+            case CODE_ITEM:
+                long id = ContentUris.parseId(uri);
+                int result = database.getWritableDatabase().delete(SQLHelper.TABLE_NAME, SQLHelper.ID + "=?", new String[]{String.valueOf(id)});
+                getContext().getContentResolver().notifyChange(ITEMS_URI, null, false);
+                return result;
+            default:
+                throw new IllegalArgumentException("Unsupported uri: " + uri);
+        }
     }
 
     @Override
