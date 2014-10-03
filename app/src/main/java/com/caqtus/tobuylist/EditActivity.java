@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
@@ -36,6 +37,9 @@ public class EditActivity extends Activity {
     @InjectView(R.id.category_spinner)
     Spinner categorySpinner;
 
+    @InjectView(R.id.timePicker)
+    TimePicker timePicker;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,11 @@ public class EditActivity extends Activity {
         ButterKnife.inject(this);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, android.R.id.text1, new String[]{"Food", "Gifts"});
         categorySpinner.setAdapter(adapter);
+
+        timePicker.setCurrentHour(19);
+        timePicker.setCurrentMinute(0);
+
+
     }
 
 
@@ -85,12 +94,16 @@ public class EditActivity extends Activity {
         String category = categorySpinner.getSelectedItem().toString();
         String weight = String.valueOf(edit_weight.getText());
         String price = String.valueOf(edit_price.getText());
+        int alarmHour = timePicker.getCurrentHour();
+        int alarmMinute = timePicker.getCurrentMinute();
 
 
         contentValues.put("TITLE", title);
         contentValues.put("CATEGORY", category);
         contentValues.put("AMOUNT", weight);
         contentValues.put("PRICE", price);
+        contentValues.put("ALARM_HOURS", alarmHour);
+        contentValues.put("ALARM_MINUTES", alarmMinute);
         getContentResolver().insert(MyContentProvider.ITEMS_URI, contentValues);
     }
 }
