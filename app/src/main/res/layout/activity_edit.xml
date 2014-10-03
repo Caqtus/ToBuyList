@@ -19,30 +19,70 @@
         android:autoText="false"
 
         android:hint="Name of ToDo" />
-
-    <EditText
-        android:maxLength="3"
-        android:id="@+id/edit_weight"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:hint="Weight in Kilograms"
-        android:inputType="numberDecimal" />
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:maxLength="3"
-        android:id="@+id/edit_price"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Weight"
+            android:textSize="20sp"
+            />
+        <EditText
+
+            android:maxLength="3"
+            android:id="@+id/edit_weight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint=" 2 kg"
+            android:inputType="numberDecimal" />
+
+           />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:hint="Price in Lari"
-        android:inputType="numberDecimal"/>
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price"
+            android:textSize="20sp"/>
+
+        <EditText
+            android:maxLength="3"
+            android:id="@+id/edit_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="Price in Lari"
+            android:inputType="numberDecimal"/>
+
+    </LinearLayout>
 
 
     <Spinner android:id="@+id/category_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reminder"
+        android:textSize="40sp"
+        android:id="@+id/edit_alarm"
+        android:layout_gravity="center_horizontal" />
+
+    <TimePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/timePicker"
+        android:layout_gravity="center_horizontal" />
 
     <Button
         android:id="@+id/edit_save"
